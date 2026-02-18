@@ -1,0 +1,160 @@
+/* ══════════════════════════════════════════════════════════════
+   Apple Design System — Premium Edition
+   Glassmorphism, depth, refined typography, modern aesthetics
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── CSS Variables (адаптация к теме Telegram) ── */
+:root {
+    /* Фоны */
+    --bg-primary: var(--tg-theme-bg-color, #FFFFFF);
+    --bg-secondary: var(--tg-theme-secondary-bg-color, #F2F2F7);
+    --bg-tertiary: #FFFFFF;
+    --bg-elevated: rgba(255, 255, 255, 0.72);
+    --bg-grouped: #F2F2F7;
+
+    /* Текст */
+    --text-primary: var(--tg-theme-text-color, #1C1C1E);
+    --text-secondary: #8E8E93;
+    --text-tertiary: #C7C7CC;
+    --text-on-accent: #FFFFFF;
+
+    /* Акценты */
+    --accent: var(--tg-theme-button-color, #007AFF);
+    --accent-light: rgba(0, 122, 255, 0.12);
+    --accent-medium: rgba(0, 122, 255, 0.2);
+    --accent-text: var(--tg-theme-button-text-color, #FFFFFF);
+    --success: #34C759;
+    --success-light: rgba(52, 199, 89, 0.12);
+    --danger: #FF3B30;
+    --danger-light: rgba(255, 59, 48, 0.12);
+    --warning: #FF9500;
+    --warning-light: rgba(255, 149, 0, 0.12);
+    --purple: #AF52DE;
+    --indigo: #5856D6;
+
+    /* Градиенты */
+    --gradient-hero: linear-gradient(135deg, #007AFF 0%, #5856D6 50%, #AF52DE 100%);
+    --gradient-income: linear-gradient(135deg, #34C759 0%, #30D158 100%);
+    --gradient-expense: linear-gradient(135deg, #FF3B30 0%, #FF6961 100%);
+
+    /* Компоненты */
+    --separator: rgba(60, 60, 67, 0.08);
+    --separator-opaque: #E5E5EA;
+    --card-bg: #FFFFFF;
+    --card-shadow: 0 2px 16px rgba(0, 0, 0, 0.06), 0 0 1px rgba(0, 0, 0, 0.04);
+    --card-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.1), 0 0 1px rgba(0, 0, 0, 0.06);
+    --card-shadow-hero: 0 12px 40px rgba(0, 122, 255, 0.25), 0 4px 12px rgba(0, 0, 0, 0.08);
+    --card-radius: 20px;
+    --card-radius-sm: 14px;
+
+    /* Blur */
+    --blur-amount: 20px;
+    --blur-bg: rgba(255, 255, 255, 0.78);
+
+    /* Размеры */
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-top: env(safe-area-inset-top, 0px);
+    --tab-height: 56px;
+    --fab-size: 60px;
+
+    /* Типографика */
+    --font: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --font-display: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --font-rounded: -apple-system, BlinkMacSystemFont, 'SF Pro Rounded', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+
+    /* Spacing */
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 12px;
+    --space-lg: 16px;
+    --space-xl: 20px;
+    --space-2xl: 24px;
+    --space-3xl: 32px;
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-primary: var(--tg-theme-bg-color, #000000);
+        --bg-secondary: var(--tg-theme-secondary-bg-color, #1C1C1E);
+        --bg-tertiary: #2C2C2E;
+        --bg-elevated: rgba(44, 44, 46, 0.72);
+        --bg-grouped: #1C1C1E;
+        --text-primary: var(--tg-theme-text-color, #FFFFFF);
+        --text-secondary: #98989F;
+        --text-tertiary: #48484A;
+        --separator: rgba(84, 84, 88, 0.36);
+        --separator-opaque: #38383A;
+        --card-bg: #1C1C1E;
+        --card-shadow: 0 2px 16px rgba(0, 0, 0, 0.2), 0 0 1px rgba(0, 0, 0, 0.16);
+        --card-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.35), 0 0 1px rgba(0, 0, 0, 0.2);
+        --card-shadow-hero: 0 12px 40px rgba(0, 0, 0, 0.4), 0 4px 12px rgba(0, 0, 0, 0.2);
+        --blur-bg: rgba(28, 28, 30, 0.78);
+        --accent-light: rgba(0, 122, 255, 0.18);
+        --accent-medium: rgba(0, 122, 255, 0.28);
+        --success-light: rgba(52, 199, 89, 0.18);
+        --danger-light: rgba(255, 59, 48, 0.18);
+        --warning-light: rgba(255, 149, 0, 0.18);
+    }
+}
+
+/* ── Reset & Base ── */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html {
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    line-height: 1.47;
+    overflow-x: hidden;
+    padding-bottom: calc(var(--tab-height) + var(--safe-bottom) + 24px);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+}
+
+/* ── Типографика ── */
+h1, h2, h3 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+h1 { font-size: 34px; letter-spacing: 0.37px; line-height: 1.12; }
+h2 { font-size: 22px; letter-spacing: 0.35px; line-height: 1.27; }
+h3 { font-size: 17px; letter-spacing: -0.41px; font-weight: 600; line-height: 1.29; }
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { display: none; }
+body { scrollbar-width: none; }
+
+/* ── Selection ── */
+::selection {
+    background: var(--accent);
+    color: var(--accent-text);
+}
+
+/* ── Focus ── */
+:focus-visible {
+    outline: 3px solid var(--accent-medium);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+
+input, button, textarea, select {
+    font-family: inherit;
+}
+  
