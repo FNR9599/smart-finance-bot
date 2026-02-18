@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#007AFF">
+    <title>Smart Finance</title>
+
+    <!-- Telegram WebApp SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <!-- Стили -->
+    <link rel="stylesheet" href="css/apple.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/animations.css">
+</head>
+<body>
+
+    <!-- ══════════ TAB BAR (навигация) ══════════ -->
+    <nav class="tab-bar" id="tabBar">
+        <button class="tab-item active" data-tab="dashboard">
+            <span class="tab-icon">🏠</span>
+            <span class="tab-label">Главная</span>
+        </button>
+        <button class="tab-item" data-tab="history">
+            <span class="tab-icon">📋</span>
+            <span class="tab-label">История</span>
+        </button>
+        <button class="tab-item" data-tab="analytics">
+            <span class="tab-icon">📊</span>
+            <span class="tab-label">Аналитика</span>
+        </button>
+        <button class="tab-item" data-tab="settings">
+            <span class="tab-icon">⚙️</span>
+            <span class="tab-label">Ещё</span>
+        </button>
+    </nav>
+
+    <!-- ══════════ DASHBOARD ══════════ -->
+    <main class="screen active" id="screen-dashboard">
+        <!-- Hero Card — баланс -->
+        <div class="hero-card">
+            <span class="hero-label">Текущий баланс</span>
+            <div class="hero-amount" id="balanceAmount">0 UZS</div>
+            <div class="hero-sub">
+                <span class="hero-income" id="heroIncome">+0</span>
+                <span class="hero-expense" id="heroExpense">-0</span>
+            </div>
+        </div>
+
+        <!-- In Pocket виджет -->
+        <div class="card in-pocket-card">
+            <div class="in-pocket-header">
+                <span class="in-pocket-icon">👛</span>
+                <span class="in-pocket-title">In Pocket</span>
+            </div>
+            <div class="in-pocket-amount" id="inPocketAmount">0 UZS/день</div>
+            <div class="in-pocket-desc">Безопасный расход в день</div>
+        </div>
+
+        <!-- Последние транзакции -->
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">Последние транзакции</h2>
+                <button class="section-action" data-tab="history">Все →</button>
+            </div>
+            <div class="transaction-list" id="recentTransactions">
+                <div class="empty-state">
+                    <span class="empty-icon">📭</span>
+                    <p>Нет транзакций</p>
+                    <p class="empty-hint">Нажмите + чтобы добавить</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ══════════ HISTORY ══════════ -->
+    <main class="screen" id="screen-history">
+        <!-- Фильтры -->
+        <div class="filter-bar">
+            <button class="filter-chip active" data-filter="all">Все</button>
+            <button class="filter-chip" data-filter="expense">Расходы</button>
+            <button class="filter-chip" data-filter="income">Доходы</button>
+        </div>
+
+        <!-- Поиск -->
+        <div class="search-bar">
+            <input type="search" class="search-input" id="searchInput" placeholder="Поиск транзакций...">
+        </div>
+
+        <!-- Список транзакций -->
+        <div class="transaction-list full-list" id="historyList">
+            <div class="empty-state">
+                <span class="empty-icon">📭</span>
+                <p>Нет транзакций</p>
+            </div>
+        </div>
+
+        <!-- Пагинация -->
+        <button class="load-more-btn" id="loadMoreBtn" style="display:none;">
+            Загрузить ещё
+        </button>
+    </main>
+
+    <!-- ══════════ ANALYTICS ══════════ -->
+    <main class="screen" id="screen-analytics">
+        <!-- Период -->
+        <div class="segment-control" id="analyticsPeriod">
+            <button class="segment-item active" data-period="week">Неделя</button>
+            <button class="segment-item" data-period="month">Месяц</button>
+            <button class="segment-item" data-period="quarter">3 мес</button>
+        </div>
+
+        <!-- Сводка -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="stat-label">Доходы</span>
+                <span class="stat-value income" id="statIncome">0</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label">Расходы</span>
+                <span class="stat-value expense" id="statExpense">0</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label">Средний/день</span>
+                <span class="stat-value" id="statAvgDaily">0</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label">Транзакций</span>
+                <span class="stat-value" id="statCount">0</span>
+            </div>
+        </div>
+
+        <!-- Donut chart -->
+        <div class="card chart-card">
+            <h3 class="card-title">Расходы по категориям</h3>
+            <div class="chart-container" id="donutChart">
+                <canvas id="donutCanvas" width="300" height="300"></canvas>
+            </div>
+            <div class="chart-legend" id="donutLegend"></div>
+        </div>
+
+        <!-- Bar chart -->
+        <div class="card chart-card">
+            <h3 class="card-title">Доходы vs Расходы</h3>
+            <div class="chart-container" id="barChart">
+                <canvas id="barCanvas" width="600" height="300"></canvas>
+            </div>
+        </div>
+    </main>
+
+    <!-- ══════════ SETTINGS ══════════ -->
+    <main class="screen" id="screen-settings">
+        <div class="settings-group">
+            <h3 class="settings-group-title">Основные</h3>
+            <div class="settings-item" id="settingCurrency">
+                <span class="settings-icon">💱</span>
+                <span class="settings-label">Валюта</span>
+                <span class="settings-value" id="settingCurrencyValue">UZS</span>
+                <span class="settings-arrow">›</span>
+            </div>
+            <div class="settings-item" id="settingDigest">
+                <span class="settings-icon">📬</span>
+                <span class="settings-label">Еженедельный дайджест</span>
+                <label class="toggle">
+                    <input type="checkbox" id="digestToggle" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="settings-group">
+            <h3 class="settings-group-title">Категории</h3>
+            <div class="categories-grid" id="categoriesGrid">
+                <!-- Заполняется через JS -->
+            </div>
+        </div>
+
+        <div class="settings-group">
+            <h3 class="settings-group-title">Данные</h3>
+            <div class="settings-item" id="settingExportXlsx">
+                <span class="settings-icon">📊</span>
+                <span class="settings-label">Экспорт Excel</span>
+                <span class="settings-arrow">›</span>
+            </div>
+            <div class="settings-item" id="settingExportCsv">
+                <span class="settings-icon">📄</span>
+                <span class="settings-label">Экспорт CSV</span>
+                <span class="settings-arrow">›</span>
+            </div>
+        </div>
+
+        <div class="app-info">
+            <p>Smart Finance Bot v1.0</p>
+            <p class="app-info-sub">Личный финансовый помощник</p>
+        </div>
+    </main>
+
+    <!-- ══════════ ADD TRANSACTION (Bottom Sheet) ══════════ -->
+    <div class="overlay" id="overlay"></div>
+    <div class="bottom-sheet" id="addSheet">
+        <div class="sheet-handle"></div>
+        <h2 class="sheet-title">Новая транзакция</h2>
+
+        <!-- Тип: расход / доход -->
+        <div class="segment-control" id="txTypeSegment">
+            <button class="segment-item active" data-type="expense">Расход</button>
+            <button class="segment-item" data-type="income">Доход</button>
+        </div>
+
+        <!-- Сумма -->
+        <div class="amount-input-wrap">
+            <input type="number" class="amount-input" id="txAmount"
+                   placeholder="0" inputmode="decimal" autofocus>
+            <span class="amount-currency" id="txCurrency">UZS</span>
+        </div>
+
+        <!-- Категории -->
+        <div class="categories-selector" id="txCategories">
+            <!-- Заполняется через JS -->
+        </div>
+
+        <!-- Комментарий -->
+        <input type="text" class="comment-input" id="txComment"
+               placeholder="Комментарий (опционально)">
+
+        <!-- Дата -->
+        <input type="date" class="date-input" id="txDate">
+    </div>
+
+    <!-- ══════════ FAB (кнопка добавления) ══════════ -->
+    <button class="fab" id="fabAdd">+</button>
+
+    <!-- Скрипты -->
+    <script src="js/telegram.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+
+</body>
+</html>

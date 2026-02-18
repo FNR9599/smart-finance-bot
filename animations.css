@@ -1,0 +1,181 @@
+/* ══════════════════════════════════════════════════════════════
+   Анимации и микровзаимодействия — Apple iOS-style
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Fade transitions для экранов ── */
+.screen {
+    animation: none;
+}
+
+.screen.active {
+    animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Count-up для суммы (JS добавляет класс) ── */
+.count-up {
+    animation: countPulse 0.5s ease;
+}
+
+@keyframes countPulse {
+    0%   { transform: scale(0.8); opacity: 0; }
+    60%  { transform: scale(1.05); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* ── Slide-up для новой транзакции ── */
+.slide-up {
+    animation: slideUp 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Slide-out при удалении ── */
+.slide-out {
+    animation: slideOut 0.3s ease forwards;
+}
+
+@keyframes slideOut {
+    to {
+        opacity: 0;
+        transform: translateX(100%);
+        height: 0;
+        padding: 0;
+        margin: 0;
+    }
+}
+
+/* ── Shake для ошибки валидации ── */
+.shake {
+    animation: shake 0.4s ease;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%      { transform: translateX(-8px); }
+    40%      { transform: translateX(8px); }
+    60%      { transform: translateX(-6px); }
+    80%      { transform: translateX(6px); }
+}
+
+/* ── Pulse для иконок ── */
+.pulse {
+    animation: pulse 0.3s ease;
+}
+
+@keyframes pulse {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.15); }
+    100% { transform: scale(1); }
+}
+
+/* ── Spinner iOS-style ── */
+.spinner {
+    width: 28px;
+    height: 28px;
+    border: 3px solid var(--separator);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 20px auto;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ── Pull-to-refresh indicator ── */
+.pull-indicator {
+    text-align: center;
+    padding: 12px;
+    color: var(--text-secondary);
+    font-size: 13px;
+    transform: translateY(-50px);
+    transition: transform 0.3s;
+}
+
+.pull-indicator.visible {
+    transform: translateY(0);
+}
+
+/* ── FAB появление ── */
+.fab {
+    animation: fabIn 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+@keyframes fabIn {
+    from { transform: scale(0); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+}
+
+/* ── Доходы/расходы - цветовое подсвечивание при добавлении ── */
+.flash-income {
+    animation: flashGreen 0.5s ease;
+}
+
+@keyframes flashGreen {
+    0%   { background: rgba(52, 199, 89, 0.2); }
+    100% { background: transparent; }
+}
+
+.flash-expense {
+    animation: flashRed 0.5s ease;
+}
+
+@keyframes flashRed {
+    0%   { background: rgba(255, 59, 48, 0.2); }
+    100% { background: transparent; }
+}
+
+/* ── Chart появление ── */
+.chart-appear {
+    animation: chartAppear 0.6s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+@keyframes chartAppear {
+    from { opacity: 0; transform: scale(0.9); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+/* ── Skeleton loading ── */
+.skeleton {
+    background: linear-gradient(
+        90deg,
+        var(--bg-secondary) 25%,
+        var(--card-bg) 50%,
+        var(--bg-secondary) 75%
+    );
+    background-size: 200% 100%;
+    animation: skeleton 1.5s ease infinite;
+    border-radius: 8px;
+}
+
+@keyframes skeleton {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.skeleton-text {
+    height: 14px;
+    width: 60%;
+    margin-bottom: 8px;
+}
+
+.skeleton-amount {
+    height: 42px;
+    width: 50%;
+    margin: 8px auto;
+}
+
+.skeleton-row {
+    height: 56px;
+    width: 100%;
+    margin-bottom: 4px;
+}
